@@ -23,6 +23,17 @@
       height="100%"
       :style="{ ...root.style['chart-days-highlight-rect'] }"
     ></rect>
+  	 <rect
+      class="gantt-elastic__chart-days-highlight-rects"
+      v-for="day in holidays"
+      :key="getKey(day)"
+      :x="day.offset.px"
+      y="0"
+      :width="day.width.px"
+      height="100%"
+      :style="{ ...root.style['chart-days-highlight-rect'] }"
+    ></rect>
+
   </g>
 </template>
 
@@ -46,6 +57,17 @@ export default {
     }
   },
   computed: {
+     /**
+     * get Holiday days (09/02/2019 for examble)
+     *
+     * @returns {array}
+     */
+    holidays() {
+      return this.root.state.options.times.steps.filter(step => {
+        console.log(step.time == 1567357200000 )
+        return step.time == 1567357200000
+      });
+    },
     /**
      * Get working days
      *

@@ -41,6 +41,7 @@
 import dayjs from 'dayjs';
 export default {
   name: 'DaysHighlight',
+  props: ['exceptionDays'],
   inject: ['root'],
   data() {
     return {};
@@ -64,8 +65,9 @@ export default {
      */
     holidays() {
       return this.root.state.options.times.steps.filter(step => {
-        console.log(step.time == 1567357200000 )
-        return step.time == 1567357200000
+
+        return this.exceptionDays.indexOf(step.time) >= 0
+
       });
     },
     /**

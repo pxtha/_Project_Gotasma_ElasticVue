@@ -49,7 +49,7 @@
             :height="root.state.options.allVisibleTasksHeight + 'px'"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <days-highlight></days-highlight>
+            <days-highlight :exceptionDays="exceptionDays"></days-highlight>
             <grid></grid>
             <dependency-lines :tasks="root.visibleTasks"></dependency-lines>
             <g
@@ -87,6 +87,7 @@ export default {
     Project,
     DaysHighlight
   },
+  props: ['exceptionDays'],
   inject: ['root'],
   data() {
     return {

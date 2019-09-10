@@ -51,7 +51,7 @@
             @touchmove.prevent="chartMouseMove"
             @wheel.prevent="chartWheel"
           >
-            <chart></chart>
+            <chart :exceptionDays="exceptionDays"></chart>
           </div>
         </div>
       </div>
@@ -97,6 +97,7 @@ let ignoreScrollEvents = false;
 
 export default {
   name: 'MainView',
+  props: ['exceptionDays'],
   components: {
     TaskList,
     Chart

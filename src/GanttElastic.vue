@@ -9,7 +9,7 @@
 <template>
   <div class="gantt-elastic" style="width:100%">
     <slot name="header"></slot>
-    <main-view ref="mainView"></main-view>
+    <main-view ref="mainView" :exceptionDays="exceptionDays"></main-view>
     <slot name="footer"></slot>
   </div>
 </template>
@@ -448,7 +448,7 @@ const GanttElastic = {
   components: {
     MainView
   },
-  props: ['tasks', 'options', 'dynamicStyle'],
+  props: ['tasks', 'options', 'dynamicStyle', 'exceptionDays'],
   provide() {
     const provider = {};
     const self = this;
@@ -460,6 +460,7 @@ const GanttElastic = {
   },
   data() {
     return {
+      actualDuration: '',
       state: {
         tasks: [],
         options: {
@@ -567,8 +568,47 @@ const GanttElastic = {
         if (typeof task.endTime === 'undefined' && task.hasOwnProperty('end')) {
           task.endTime = dayjs(task.end).valueOf();
         } else if (typeof task.endTime === 'undefined' && task.hasOwnProperty('duration')) {
-          task.endTime = task.startTime + task.duration;
+          let timeStart = new Date(task.startTime);
+          let calculateTimeChart = task.startTime;
+          let dayofWeek = (timeStart.getDay());
+          let durationDays = task.duration/86400000;
+          this.actualDuration = task.duration
+          console.log('startTime: ' + dayjs(task.startTime).format('DD-MM-YYYY'))
+          console.log('duration: ' + durationDays)
+          console.log('dateofweeks ' + dayofWeek)
+          console.log('ngay cua tao', this.exceptionDays)
+
+        for (let i = 0; i < durationDays; i++) {
+            console.log('lap c', i)
+            if(dayofWeek == 6)
+            {
+              this.actualDuration += 172800000;
+               calculateTimeChart += 172800000;
+               dayofWeek = 1;
+               console.log('cong t7 nhe')
+            } else if (dayofWeek == 0)
+            {
+              console.log('cong cn')
+              this.actualDuration += 86400000;
+              calculateTimeChart += 86400000;
+            } else {
+              console.log('tinh lan 1', calculateTimeChart)
+                this.exceptionDays.forEach(exception => {
+                  if(calculateTimeChart === exception)
+                  {
+                    console.log('tinh exception')
+                    this.actualDuration += 86400000;
+                    console.log('tinh lan 2', calculateTimeChart)
+                    console.log(this.actualDuration, 'sau khi nghi')
+                  }
+              })
+            calculateTimeChart += 86400000;
+            }
+            dayofWeek += 1;
+          }
+          task.endTime = task.startTime + (this.actualDuration-1);
         }
+
         if (typeof task.duration === 'undefined' && task.hasOwnProperty('endTime')) {
           task.duration = task.endTime - task.startTime;
         }
@@ -1423,7 +1463,7 @@ const GanttElastic = {
       for (let index = 0; index < len; index++) {
         let task = visibleTasks[index];
         task.width =
-          task.duration / this.state.options.times.timePerPixel - this.style['grid-line-vertical']['stroke-width'];
+           this.actualDuration / this.state.options.times.timePerPixel - this.style['grid-line-vertical']['stroke-width'];
         if (task.width < 0) {
           task.width = 0;
         }

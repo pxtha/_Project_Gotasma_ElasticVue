@@ -56,7 +56,8 @@ function getOptions(userOptions) {
       progress: 'progress',
       type: 'type',
       style: 'style',
-      collapsed: 'collapsed'
+      collapsed: 'collapsed',
+      myAttribute: 'myAttribute'
     },
     width: 0,
     height: 0,
@@ -563,13 +564,16 @@ const GanttElastic = {
         if (typeof task.parent === 'undefined') {
           task.parent = null;
         }
+        if (typeof task.myAttribute === 'undefined') {
+          task.myAttribute = null;
+        }
         if (typeof task.startTime === 'undefined') {
           task.startTime = dayjs(task.start).valueOf();
         }
         if (typeof task.endTime === 'undefined' && task.hasOwnProperty('end')) {
           task.endTime = dayjs(task.end).valueOf(); // frick1
         } else if (typeof task.endTime === 'undefined' && task.hasOwnProperty('duration')) {
-          task.endTime = task.duration
+          task.myAttribute = task.duration
           let timeStart = new Date(task.startTime);
           let calculateTimeChart = task.startTime;
           let dayofWeek = (timeStart.getDay());
@@ -621,6 +625,7 @@ const GanttElastic = {
           calculateTimeChart += 86400000
           }
         task.duration = this.actualDuration
+        task.endTime = task.startTime + (task.duration - 1)
         }
         if (typeof task.duration === 'undefined' && task.hasOwnProperty('endTime')) {
           task.duration = task.endTime - task.startTime;

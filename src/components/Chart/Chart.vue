@@ -59,7 +59,7 @@
               :task="task"
               :key="task.id"
             >
-              <component :task="task" :is="task.type"></component>
+              <component :task="task" :is="task.type" @myChartEmitEvent="handleEvent"></component>
             </g>
           </svg>
         </div>
@@ -113,6 +113,11 @@ export default {
      */
     getViewBox() {
       return `0 0 ${this.root.state.options.width} ${this.root.state.options.allVisibleTasksHeight}`;
+    }
+  },
+  methods: {
+    handleEvent(data) {
+      this.$modal.show('taskModal', { data: data })
     }
   }
 };

@@ -38,7 +38,7 @@
       :width="task.width"
       :height="task.height"
       :viewBox="`0 0 ${task.width} ${task.height}`"
-      @click="emitEvent('click', $event)"
+      @click="myEmitProject(task)"
       @mouseenter="emitEvent('mouseenter', $event)"
       @mouseover="emitEvent('mouseover', $event)"
       @mouseout="emitEvent('mouseout', $event)"
@@ -133,6 +133,11 @@ export default {
       const expander = this.root.state.options.chart.expander;
       return expander.display || (expander.displayIfTaskListHidden && !this.root.state.options.taskList.display);
     }
-  }
+  },
+  methods: {
+    myEmitProject(task) {
+      this.$emit('myChartEmitEvent', task)
+    }
+  },
 };
 </script>

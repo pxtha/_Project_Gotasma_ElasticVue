@@ -38,7 +38,7 @@
       :width="task.width"
       :height="task.height"
       :viewBox="`0 0 ${task.width} ${task.height}`"
-      @click="emitEvent('click', $event)"
+      @click="myEmitTask(task)"
       @mouseenter="emitEvent('mouseenter', $event)"
       @mouseover="emitEvent('mouseover', $event)"
       @mouseout="emitEvent('mouseout', $event)"
@@ -77,6 +77,7 @@ import ChartText from '../Text.vue';
 import ProgressBar from '../ProgressBar.vue';
 import Expander from '../../Expander.vue';
 import taskMixin from './Task.mixin.js';
+
 export default {
   name: 'Task',
   components: {
@@ -108,6 +109,11 @@ export default {
     getPoints() {
       const task = this.task;
       return `0,0 ${task.width},0 ${task.width},${task.height} 0,${task.height}`;
+    }
+  },
+  methods: {
+    myEmitTask(task) {
+      this.$emit('myChartEmitEvent', task)
     }
   }
 };

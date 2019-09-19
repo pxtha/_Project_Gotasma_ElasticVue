@@ -57,7 +57,8 @@ function getOptions(userOptions) {
       type: 'type',
       style: 'style',
       collapsed: 'collapsed',
-      myAttribute: 'myAttribute'
+      myAttribute: 'myAttribute',
+      effort: 'effort'
     },
     width: 0,
     height: 0,
@@ -567,13 +568,16 @@ const GanttElastic = {
         if (typeof task.myAttribute === 'undefined') {
           task.myAttribute = null;
         }
+        if (typeof task.effort === 'undefined') {
+          task.effort = 100;
+        }
         if (typeof task.startTime === 'undefined') {
           task.startTime = dayjs(task.start).valueOf();
         }
         if (typeof task.endTime === 'undefined' && task.hasOwnProperty('end')) {
           task.endTime = dayjs(task.end).valueOf(); // frick1
         } else if (typeof task.endTime === 'undefined' && task.hasOwnProperty('duration')) {
-          task.myAttribute = task.duration
+          task.myAttribute = task.duration        // gan tam duration
           let timeStart = new Date(task.startTime);
           let calculateTimeChart = task.startTime;
           let dayofWeek = (timeStart.getDay());
@@ -658,6 +662,7 @@ const GanttElastic = {
      * Initialize component
      */
     initialize(itsUpdate = '') {
+      console.log('my test on initialize')
       let options = mergeDeep({}, this.state.options, getOptions(this.options), this.options);
       let tasks = this.mapTasks(this.tasks, options);
       if (Object.keys(this.state.dynamicStyle).length === 0) {

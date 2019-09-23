@@ -21,6 +21,7 @@ import MainView from './components/MainView.vue';
 import getStyle from './style.js';
 import ResizeObserver from 'resize-observer-polyfill';
 
+
 const ctx = document.createElement('canvas').getContext('2d');
 let VueInst = VueInstance;
 function initVue() {
@@ -31,7 +32,6 @@ function initVue() {
 initVue();
 
 let hourWidthCache = null;
-
 /**
  * Helper function to fill out empty options in user settings
  *
@@ -56,7 +56,8 @@ function getOptions(userOptions) {
       progress: 'progress',
       type: 'type',
       style: 'style',
-      collapsed: 'collapsed'
+      collapsed: 'collapsed',
+      myAttribute: 'myAttribute'
     },
     width: 0,
     height: 0,
@@ -460,7 +461,6 @@ const GanttElastic = {
   },
   data() {
     return {
-      actualDuration: '',
       state: {
         tasks: [],
         options: {
@@ -521,8 +521,13 @@ const GanttElastic = {
      *
      * @param {array} tasks
      */
+
+
     fillTasks(tasks) {
       for (let task of tasks) {
+        if (typeof task.user === 'undefined') {
+          task.user = '';
+        }
         if (typeof task.x === 'undefined') {
           task.x = 0;
         }
@@ -562,60 +567,73 @@ const GanttElastic = {
         if (typeof task.parent === 'undefined') {
           task.parent = null;
         }
+        if (typeof task.myAttribute === 'undefined') {
+          task.myAttribute = null;
+        }
         if (typeof task.startTime === 'undefined') {
           task.startTime = dayjs(task.start).valueOf();
         }
         if (typeof task.endTime === 'undefined' && task.hasOwnProperty('end')) {
-          task.endTime = dayjs(task.end).valueOf();
+          task.endTime = dayjs(task.end).valueOf(); // frick1
         } else if (typeof task.endTime === 'undefined' && task.hasOwnProperty('duration')) {
+          task.myAttribute = task.duration
           let timeStart = new Date(task.startTime);
           let calculateTimeChart = task.startTime;
           let dayofWeek = (timeStart.getDay());
-          let durationDays = task.duration/86400000;
+          let durationDays = task.duration / 86400000;
           this.actualDuration = task.duration
-          console.log('startTime: ' + dayjs(task.startTime).format('DD-MM-YYYY'))
-          console.log('duration: ' + durationDays)
-          console.log('dateofweeks ' + dayofWeek)
-          console.log('ngay cua tao', this.exceptionDays)
-
-        for (let i = 0; i < durationDays; i++) {
-            console.log('lap c', i)
-            if(dayofWeek == 6)
-            {
-              this.actualDuration += 172800000;
-               calculateTimeChart += 172800000;
-               dayofWeek = 1;
-               console.log('cong t7 nhe')
-            } else if (dayofWeek == 0)
-            {
-              console.log('cong cn')
-              this.actualDuration += 86400000;
-              calculateTimeChart += 86400000;
-            } else {
-              console.log('tinh lan 1', calculateTimeChart)
-                this.exceptionDays.forEach(exception => {
-                  if(calculateTimeChart === exception)
-                  {
-                    console.log('tinh exception')
-                    this.actualDuration += 86400000;
-                    console.log('tinh lan 2', calculateTimeChart)
-                    console.log(this.actualDuration, 'sau khi nghi')
-                  }
-              })
-            calculateTimeChart += 86400000;
+          // console.log('startTime: ' + dayjs(task.startTime).format('DD-MM-YYYY'))
+          // console.log('duration: ' + durationDays)
+          // console.log('dateofweeks ' + dayofWeek)
+          // console.log('ngay nghi list', this.exceptionDays)
+          let isHoliday = false
+          for (let i = 0; i < durationDays; i++) {
+            for (let j = 0; j < this.exceptionDays.length; j++) {
+              if (calculateTimeChart === this.exceptionDays[j]) {
+                isHoliday = true
+                break
+              }        
             }
-            dayofWeek += 1;
+            // console.log('lập lần', i , 'durationDays', durationDays)
+            if(isHoliday) {
+              // console.log('La holiday')
+              // console.log('ngay trong tuan', dayofWeek)
+              this.actualDuration += 86400000
+              isHoliday = false
+              durationDays++
+              if (dayofWeek == 6)
+              {
+                dayofWeek = 0
+              } else {
+                dayofWeek += 1
+              }
+            }
+            else if(dayofWeek == 6) {
+              // console.log('la T7')
+              dayofWeek = 0
+              this.actualDuration += 86400000
+              durationDays++
+            }
+            else if(dayofWeek == 0) {
+              // console.log('la CN')
+              dayofWeek += 1
+              this.actualDuration += 86400000
+              durationDays++
+            } else {
+              // console.log('la ngay thuong')
+              dayofWeek += 1
+            }
+          calculateTimeChart += 86400000
           }
-          task.endTime = task.startTime + (this.actualDuration-1);
+        task.duration = this.actualDuration
+        task.endTime = task.startTime + (task.duration )
         }
-
         if (typeof task.duration === 'undefined' && task.hasOwnProperty('endTime')) {
           task.duration = task.endTime - task.startTime;
         }
       }
       return tasks;
     },
-
     /**
      * Map tasks
      *
@@ -1463,7 +1481,7 @@ const GanttElastic = {
       for (let index = 0; index < len; index++) {
         let task = visibleTasks[index];
         task.width =
-           this.actualDuration / this.state.options.times.timePerPixel - this.style['grid-line-vertical']['stroke-width'];
+           task.duration / this.state.options.times.timePerPixel - this.style['grid-line-vertical']['stroke-width']; // frick
         if (task.width < 0) {
           task.width = 0;
         }

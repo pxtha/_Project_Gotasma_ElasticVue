@@ -110,7 +110,7 @@ function getOptions(userOptions) {
       steps: []
     },
     row: {
-      height: 24 //*
+      height: 24
     },
     maxRows: 20, //*
     maxHeight: 0, //*

@@ -117,7 +117,8 @@ export default {
   },
   methods: {
     handleEvent(data) {
-      this.$modal.show('taskModal', { data: data })
+      this.$modal.show('breakTaskModal', { data: data })
+      console.log('testing break')
     }
   }
 };

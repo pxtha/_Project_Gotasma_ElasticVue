@@ -111,7 +111,7 @@ function getOptions(userOptions) {
       steps: []
     },
     row: {
-      height: 24 //*
+      height: 24
     },
     maxRows: 20, //*
     maxHeight: 0, //*
@@ -526,6 +526,9 @@ const GanttElastic = {
 
     fillTasks(tasks) {
       for (let task of tasks) {
+        if (typeof task.user === 'undefined') {
+          task.user = '';
+        }
         if (typeof task.x === 'undefined') {
           task.x = 0;
         }
@@ -627,7 +630,7 @@ const GanttElastic = {
           calculateTimeChart += 86400000
           }
         task.duration = this.actualDuration
-        task.endTime = task.startTime + (task.duration - 1)
+        task.endTime = task.startTime + (task.duration )
         }
         if (typeof task.duration === 'undefined' && task.hasOwnProperty('endTime')) {
           task.duration = task.endTime - task.startTime;

@@ -38,7 +38,7 @@
       :width="task.width"
       :height="task.height"
       :viewBox="`0 0 ${task.width} ${task.height}`"
-      @click="emitEvent('click', $event)"
+      @click="myEmitMilestone(task)"
       @mouseenter="emitEvent('mouseenter', $event)"
       @mouseover="emitEvent('mouseover', $event)"
       @mouseout="emitEvent('mouseout', $event)"
@@ -118,6 +118,12 @@ export default {
         ${task.width},${fifty}
         ${task.width - offset},${task.height}
         ${offset},${task.height}`;
+    }
+  },
+  methods: {
+    myEmitMilestone(task) {
+      // this.$emit('myChartEmitEvent', task)
+      console.log('this is a milestone')
     }
   }
 };

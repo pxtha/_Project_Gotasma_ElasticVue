@@ -57,7 +57,7 @@ function getOptions(userOptions) {
       type: 'type',
       style: 'style',
       collapsed: 'collapsed',
-      myAttribute: 'myAttribute',
+      estimateDuration: 'estimateDuration',
       effort: 'effort'
     },
     width: 0,
@@ -568,8 +568,8 @@ const GanttElastic = {
         if (typeof task.parent === 'undefined') {
           task.parent = null;
         }
-        if (typeof task.myAttribute === 'undefined') {
-          task.myAttribute = null;
+        if (typeof task.estimateDuration === 'undefined') {
+          task.estimateDuration = null;
         }
         if (typeof task.effort === 'undefined') {
           task.effort = 100;
@@ -580,7 +580,7 @@ const GanttElastic = {
         if (typeof task.endTime === 'undefined' && task.hasOwnProperty('end')) {
           task.endTime = dayjs(task.end).valueOf(); // frick1
         } else if (typeof task.endTime === 'undefined' && task.hasOwnProperty('duration')) {
-          task.myAttribute = task.duration        // gan tam duration
+          task.estimateDuration = task.duration        // gan tam duration
           let timeStart = new Date(task.startTime);
           let calculateTimeChart = task.startTime;
           let dayofWeek = (timeStart.getDay());

@@ -527,7 +527,10 @@ const GanttElastic = {
     fillTasks(tasks) {
       for (let task of tasks) {
         if (typeof task.user === 'undefined') {
-          task.user = '';
+          task.user = [];
+        }
+        if (typeof task.usersId === 'undefined') {
+          task.usersId = [];
         }
         if (typeof task.x === 'undefined') {
           task.x = 0;
@@ -665,7 +668,6 @@ const GanttElastic = {
      * Initialize component
      */
     initialize(itsUpdate = '') {
-      console.log('my test on initialize')
       let options = mergeDeep({}, this.state.options, getOptions(this.options), this.options);
       let tasks = this.mapTasks(this.tasks, options);
       if (Object.keys(this.state.dynamicStyle).length === 0) {

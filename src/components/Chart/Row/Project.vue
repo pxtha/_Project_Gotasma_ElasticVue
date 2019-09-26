@@ -136,7 +136,8 @@ export default {
   },
   methods: {
     myEmitProject(task) {
-      this.$emit('myChartEmitEvent', task)
+      // this.$emit('myChartEmitEvent', task)
+      console.log('this is a parent task')
     }
   },
 };

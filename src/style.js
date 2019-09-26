@@ -256,9 +256,9 @@ export default function getStyle(fontSize = '12px', fontFamily = 'Arial, sans-se
     'chart-row-bar-wrapper': {},
     'chart-row-bar': {},
     'chart-row-bar-polygon': {
-       stroke: '#173e43',
+       stroke: '#3c9445',
             'stroke-width': 2,
-            fill: '#3fb0ac'
+            fill: '#65c16f'
     },
     'chart-row-project-wrapper': {},
     'chart-row-project': {},

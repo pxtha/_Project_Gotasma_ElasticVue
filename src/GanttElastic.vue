@@ -527,13 +527,10 @@ const GanttElastic = {
     fillTasks(tasks) {
       for (let task of tasks) {
         if (typeof task.progress === 'undefined') {
-          task.progress = 0
+          task.progress = 100
         }
         if (typeof task.user === 'undefined') {
           task.user = [];
-        }
-        if (typeof task.usersId === 'undefined') {
-          task.usersId = [];
         }
         if (typeof task.x === 'undefined') {
           task.x = 0;
@@ -585,8 +582,13 @@ const GanttElastic = {
         }
         if (typeof task.endTime === 'undefined' && task.hasOwnProperty('end')) {
           task.endTime = dayjs(task.end).valueOf(); // frick1
-        } else if ( typeof task.endTime === 'undefined' && task.hasOwnProperty('duration') ) {
-          task.estimateDuration = task.duration        // gan tam duration
+        } else if (typeof task.endTime === 'undefined' && task.hasOwnProperty('duration')) {
+          if (task.effort === 50) {
+            task.estimateDuration = task.duration 
+            task.duration = task.duration * 2
+          } else {
+            task.estimateDuration = task.duration        // gan tam duration
+          }
           let timeStart = new Date(task.startTime);
           let calculateTimeChart = task.startTime;
           let dayofWeek = (timeStart.getDay());

@@ -583,16 +583,18 @@ const GanttElastic = {
         if (typeof task.endTime === 'undefined' && task.hasOwnProperty('end')) {
           task.endTime = dayjs(task.end).valueOf(); // frick1
         } else if (typeof task.endTime === 'undefined' && task.hasOwnProperty('duration')) {
-          task.estimateDuration = task.duration        // gan tam duration
+          if (task.effort === 50) {
+            task.estimateDuration = task.duration 
+            task.duration = task.duration * 2
+          } else {
+            task.estimateDuration = task.duration        // gan tam duration
+          }
           let timeStart = new Date(task.startTime);
           let calculateTimeChart = task.startTime;
           let dayofWeek = (timeStart.getDay());
           let durationDays = task.duration / 86400000;
           this.actualDuration = task.duration
-          // console.log('startTime: ' + dayjs(task.startTime).format('DD-MM-YYYY'))
-          // console.log('duration: ' + durationDays)
-          // console.log('dateofweeks ' + dayofWeek)
-          // console.log('ngay nghi list', this.exceptionDays)
+
           let isHoliday = false
           for (let i = 0; i < durationDays; i++) {
             for (let j = 0; j < this.exceptionDays.length; j++) {

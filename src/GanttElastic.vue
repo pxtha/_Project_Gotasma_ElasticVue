@@ -527,7 +527,7 @@ const GanttElastic = {
     fillTasks(tasks) {
       for (let task of tasks) {
         if (typeof task.progress === 'undefined') {
-          task.progress = 0
+          task.progress = 100
         }
         if (typeof task.user === 'undefined') {
           task.user = [];

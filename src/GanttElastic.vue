@@ -526,6 +526,9 @@ const GanttElastic = {
 
     fillTasks(tasks) {
       for (let task of tasks) {
+        if (typeof task.progress === 'undefined') {
+          task.progress = 0
+        }
         if (typeof task.user === 'undefined') {
           task.user = [];
         }
@@ -594,7 +597,6 @@ const GanttElastic = {
           let dayofWeek = (timeStart.getDay());
           let durationDays = task.duration / 86400000;
           this.actualDuration = task.duration
-
           let isHoliday = false
           for (let i = 0; i < durationDays; i++) {
             for (let j = 0; j < this.exceptionDays.length; j++) {
